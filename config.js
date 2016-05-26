@@ -9,7 +9,8 @@ module.exports = {
     email: ''
   },
    pg: {
-     server: 'postgres://localhost:5432/snippet_helper'
+     server: 'postgres://localhost:5432/contentfu',
+    table: 'content'
    },
   files: {
     routes: '',

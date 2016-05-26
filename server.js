@@ -9,7 +9,7 @@ var addCorsHeaders = require('hapi-cors-headers');
 var routes = require('./server/routes/router.js');
 
 //query params
-query.connectionParameters = 'postgres://samrocksc:@localhost:5432/snippet_helper';
+query.connectionParameters = 'postgres://localhost:5432/contentfu';
 
 //create the server
 var server = new Hapi.Server();
