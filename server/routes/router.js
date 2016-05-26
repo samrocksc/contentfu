@@ -2,25 +2,32 @@ var handler = require('../handlers/addContent');
 
 module.exports = [
   {
-    //creating my index page
     method: 'GET',
     path: '/',
     handler: handler.index
   },
   {
-    //just a vanilla get that inserts a record to test database
-    method: 'POST',
+    // GET a list of the content
+    method: 'GET',
     path: '/api',
+    handler: handler.listContent
+  },
+  {
+    // Add content to database
+    method: 'POST',
+    path: '/api/{key}/{desc}/{content}',
     handler: handler.addContent
   },
   {
+    // Update the content of the database
     method: 'PUT',
-    path: '/api',
+    path: '/api/{id}/{description}/{content}',
     handler: handler.updateContent
   },
   {
+    // Delete an item from the database
     method: 'DELETE',
     path: '/api/{key}',
-    handler: handler.index
+    handler: handler.deleteContent
   }
 ];

@@ -4,7 +4,10 @@ query.connectionParameters = config.pg.server;
 
 module.exports = {
   index: function(request,reply) {
-    console.log('index');
+    reply('nothing here');
+  },
+  listContent: function(request,reply) {
+    console.log('listContent');
     query('select * from content', function(err, rows, results){
       var test = results;
       reply(test.rows);
@@ -12,21 +15,25 @@ module.exports = {
   },
   addContent: function(request,reply) {
     console.log('addContent');
-    query("INSERT INTO content (key, description, content) VALUES ('keyname', 'test description', 'test content man.  this is some crazy stuff' )", function(err,rows,results){
+    console.log('request',request);
+    var key = request.params.key;
+    var description = request.params.desc;
+    var content = request.params.content;
+    query("INSERT INTO content (key, description, content) VALUES ('"+key+"', '"+description+"', '"+content+"' )", function(err,rows,results){
       reply(results);
     })
   },
   updateContent: function(request,reply) {
     console.log('updateContent');
-    query("UPDATE CONTENT SET description='updated', content='content updated' WHERE id=3", function(err,rows,results) {
-      reply(results)
-    })
-  },
-  listContent: function(request,reply) {
-    console.log('listContent');
-    query('select * from content', function(err, rows, results){
-      var test = results;
-      reply(test.rows);
+    var id = request.params.id;
+    var description = request.params.description;
+    var content = request.params.content;
+    query("UPDATE CONTENT SET description='"+description+"', content='"+content+"' WHERE id='"+id+"'", function(err,rows,results) {
+      if(err) {
+        console.log(err);
+      } else {
+        reply(results);
+      }
     })
   },
   deleteContent: function(request,reply) {
