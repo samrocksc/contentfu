@@ -1,7 +1,7 @@
 module.exports = {
   basic: {
-    name: 'Snippet Helper',
-    description: 'Just a simple snippet helper for a new developer.'
+    name: 'ContentFu',
+    description: 'Create content quickly when framing out a website'
   },
   server: {
     host: 'localhost',

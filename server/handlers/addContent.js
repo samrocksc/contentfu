@@ -15,11 +15,10 @@ module.exports = {
   },
   addContent: function(request,reply) {
     console.log('addContent');
-    console.log('request',request);
     var key = request.params.key;
     var description = request.params.desc;
     var content = request.params.content;
-    query("INSERT INTO content (key, description, content) VALUES ('"+key+"', '"+description+"', '"+content+"' )", function(err,rows,results){
+    query("INSERT INTO content (key, description, content) VALUES ('"+request.params.key+"', '"+request.params.description+"', '"+request.params.content+"' )", function(err,rows,results){
       reply(results);
     })
   },
@@ -38,7 +37,7 @@ module.exports = {
   },
   deleteContent: function(request,reply) {
     console.log('deleteContent');
-    query('DELETE FROM content WHERE id='+encodeURIComponent(request.params.user)+'',function(err, rows, results) {
+    query('DELETE FROM content WHERE id='+request.params.user+'',function(err, rows, results) {
       reply(results);
     })
   }

@@ -1,37 +1,23 @@
-//Modules
-var Hapi = require('hapi');
-var Path = require('path');
-var query = require('pg-query');
-var addCorsHeaders = require('hapi-cors-headers');
+var webpack = require('webpack')
+var webpackDevMiddleware = require('webpack-dev-middleware')
+var webpackHotMiddleware = require('webpack-hot-middleware')
+var config = require('./webpack.config')
 
+var app = new (require('express'))()
+var port = 3000
 
-//Exports
-var routes = require('./server/routes/router.js');
+var compiler = webpack(config)
+app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
+app.use(webpackHotMiddleware(compiler))
 
-//query params
-query.connectionParameters = 'postgres://localhost:5432/contentfu';
+app.get("/", function(req, res) {
+  res.sendFile(__dirname + '/index.html')
+})
 
-//create the server
-var server = new Hapi.Server();
-
-//Define the server
-server.connection({
-  port: 3000,
-  host: 'localhost',
-  labels: ['web']
-});
-
-//Include all of our routes
-for (var route in routes) {
-  server.route(routes[route]);
-}
-
-server.ext('onPreResponse', addCorsHeaders);
-
-server.start(function(err) {
-  if (err) {
-    throw err;
+app.listen(port, function(error) {
+  if (error) {
+    console.error(error)
   } else {
-    console.log('Hapi Server is started on port: ', server.info.port);
+    console.info("==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
   }
-});
+})
