@@ -14,9 +14,9 @@ const store = configureStore()
 
 render(
   <MuiThemeProvider muiTheme={getMuiTheme()}>
-  <Provider store={store}>
-  <App />
-  </Provider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </MuiThemeProvider>,
   document.getElementById('root')
 )
