@@ -9,24 +9,18 @@ module.exports = [
   },
   {
     //just a vanilla get that inserts a record to test database
-    method: 'GET',
-    path: '/api',
-    handler: handler.index
-  },
-  {
-    //creating post data to insert a record endpoint
     method: 'POST',
-    path: '/api/',
-    handler: handler.index
+    path: '/api',
+    handler: handler.addContent
   },
   {
     method: 'PUT',
-    path: '/api/',
-    handler: handler.index
+    path: '/api',
+    handler: handler.updateContent
   },
   {
     method: 'DELETE',
-    path: '/api/{b}',
+    path: '/api/{key}',
     handler: handler.index
   }
 ];
