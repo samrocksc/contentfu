@@ -1,9 +1,10 @@
 import fetch from 'isomorphic-fetch'
 
-export const REQUEST_POSTS = 'REQUEST_POSTS'
-export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-export const SELECT_REDDIT = 'SELECT_REDDIT'
-export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT'
+export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const SELECT_REDDIT = 'SELECT_REDDIT';
+export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT';
+export const RECEIVE_CONTENT = 'RECEIVE_CONTENT';
 
 export function selectReddit(reddit) {
   return {
@@ -33,6 +34,24 @@ function receivePosts(reddit, json) {
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   }
+}
+
+function receiveContent(content) {
+  console.log('A>receiveContent');
+  return {
+    type: RECEIVE_CONTENT,
+    content: content,
+    receivedAt: Date.now()
+  }
+}
+//fetches list of server shards
+export function fetchContent(){
+  console.log('a>fetchShardList');
+  return dispatch => {
+    return fetch('http://localhost:1337/api')
+    .then(response => response.json())
+    .then(json => dispatch(receiveContent(json)));
+  };
 }
 
 function fetchPosts(reddit) {

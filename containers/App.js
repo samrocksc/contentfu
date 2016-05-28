@@ -1,75 +1,86 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
-import Picker from '../components/Picker'
-import Posts from '../components/Posts'
+import { fetchContent } from '../actions'
+// Dropdown MUI
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
 class App extends Component {
   constructor(props) {
     super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleRefreshClick = this.handleRefreshClick.bind(this)
-  }
-
-  componentDidMount() {
-    const { dispatch, selectedReddit } = this.props
-    dispatch(fetchPostsIfNeeded(selectedReddit))
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedReddit !== this.props.selectedReddit) {
-      const { dispatch, selectedReddit } = nextProps
-      dispatch(fetchPostsIfNeeded(selectedReddit))
+    this.state = {
+      contentValue: 'Please pick a key to modify',
+      value: '2'
     }
   }
 
-  handleChange(nextReddit) {
-    this.props.dispatch(selectReddit(nextReddit))
+  componentDidMount() {
+    const { dispatch } = this.props
+    console.log('componentDidMount',this.props);
+    dispatch(fetchContent());
   }
 
-  handleRefreshClick(e) {
-    e.preventDefault()
-
-    const { dispatch, selectedReddit } = this.props
-    dispatch(invalidateReddit(selectedReddit))
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+  selectKey(event){
+    this.setState({contentValue: event.target.value})
   }
+
+  handleChange() {
+    console.log('change happened');
+  }
+
 
   render() {
-    const { selectedReddit, posts, isFetching, lastUpdated } = this.props
-    const isEmpty = posts.length === 0
+    const { content, selectedReddit, posts, isFetching, lastUpdated } = this.props
+    const keyMap = content.contentList.map(function(content){
+      return <option key={content.id} value={content.content}>{content.key}</option>
+    })
     return (
-      <div>
-        <h1>Hello</h1>
-      </div>
+      <div style={divStyle}>
+
+      <Card>
+        <CardMedia overlay={<CardTitle title="ContentFu" subtitle="Quickly create a content API" />}>
+          <img src="http://lorempixel.com/600/337/nature/" />
+        </CardMedia>
+          <CardTitle title="Your Content" subtitle="Use the dropdown to view your content" />
+          <CardText>
+            <select onChange={this.selectKey.bind(this)}>
+              <option>Select A Key</option>
+              {keyMap}
+            </select>
+            <p>{this.state.contentValue}</p>
+          </CardText>
+          <CardActions>
+            <FlatButton label="Add Content" />
+          </CardActions>
+        </Card>
+
+
+        </div>
     )
   }
 }
 
-App.propTypes = {
-  selectedReddit: PropTypes.string.isRequired,
-  posts: PropTypes.array.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  lastUpdated: PropTypes.number,
-  dispatch: PropTypes.func.isRequired
+var textStyle = {
+  width: '300px'
 }
 
-function mapStateToProps(state) {
-  const { selectedReddit, postsByReddit } = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: posts
-  } = postsByReddit[selectedReddit] || {
-    isFetching: true,
-    items: []
-  }
+var divStyle = {
+  margin: '0 auto',
+  width: '50%'
+}
 
+App.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  content: PropTypes.object.isRequired
+}
+
+
+function mapStateToProps(state) {
+  const { content } = state
   return {
-    selectedReddit,
-    posts,
-    isFetching,
-    lastUpdated
+    content
   }
 }
 

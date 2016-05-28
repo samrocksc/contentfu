@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react'
 export default class Posts extends Component {
   render() {
     return (
-      <ul>
+      <ul> 
         {this.props.posts.map((post, i) =>
           <li key={i}>{post.title}</li>
         )}
